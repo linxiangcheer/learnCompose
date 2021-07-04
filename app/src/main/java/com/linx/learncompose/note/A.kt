@@ -1,7 +1,8 @@
 package com.linx.learncompose.note
 
 /**
- * 2021/6/22 22:13
+ * 2021/6/22 22:13  [02]
+ *
  *
  * 声明式UI —— 只需要对UI的元素进行一次性的声明,并且不手动更新UI
  * val name by remember { mutableStateOf("Hello") }

@@ -1,5 +1,6 @@
 package com.linx.learncompose
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +17,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -27,6 +29,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.linx.learncompose.ui.theme.WeComposeTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val intentO by lazy {
+        Intent(this, OneActivity::class.java)
+    }
+
+    private val intentT by lazy {
+        Intent(this, TwoActivity::class.java)
+    }
+
+    private val intentThree by lazy {
+        Intent(this, ThreeActivity::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +94,7 @@ class MainActivity : ComponentActivity() {
                             .clickable {
                                 mainViewModel.i += 1
                                 mainViewModel.change.value = "点击整个页面一次 ${mainViewModel.i}"
+                                startActivity(intentO)
                             }
                             .background(Color.Red, RoundedCornerShape(8.dp))
                             .padding(8.dp)
@@ -135,9 +150,17 @@ class MainActivity : ComponentActivity() {
                                 .padding(10.dp)
                                 .width(20.dp)
                                 .height(50.dp)
+                                .fillMaxWidth()
                         ) {
                             items(list) { item ->
-                                Text(text = item)
+                                Text(text = item,
+                                    Modifier
+                                        .clickable {
+                                            startActivity(intentT)
+                                        }
+                                        .padding(10.dp)
+                                        .background(Color.White)
+                                        .padding(10.dp))
                             }
                         }
                         LazyRow(
@@ -147,6 +170,9 @@ class MainActivity : ComponentActivity() {
                                 .padding(10.dp)
                                 .height(20.dp)
                                 .width(20.dp)
+                                .clickable {
+                                    startActivity(intentThree)
+                                }
                         ) {
                             items(list) { item ->
                                 Text(text = item)
@@ -164,11 +190,48 @@ class MainActivity : ComponentActivity() {
                             contentDescription = "照片"
                         )
                     }
+                    ZhuKai("Hello") // Hello:这是个短名字
+                    ZhuKai("RengWuXian") // RengWuXian:这是个长名字
+                    ZhuKai("ZhuKai") // ZhuKai:这是个长名字
                 }
 
             }
         }
     }
+
+}
+
+/**
+ * 自定义Composable的使用姿势
+ * 里面只调用一个Composable
+ * （ Column/ Row /Box 嵌套 ）
+ * 不要Text() Image()这样
+ */
+@Composable
+private fun ZhuKai(name: String) {
+    Column(Modifier.background(Color.Red)) {
+
+        /**
+         * 加上[remember]，可以保证如果name不变的话 remember内的函数不会走，提高性能
+         */
+        val calculatedName = remember(name) {
+            name + if (name.length > 5) {
+                ": 这是个长名字"
+            } else {
+                ": 这是个短名字"
+            }
+        }
+
+        Text(calculatedName)
+        Image(
+            painter = painterResource(id = R.drawable.ic_launcher_background),
+            contentDescription = "扔物线"
+        )
+    }
+}
+
+@Composable
+fun MainScreen() {
 
 }
 
