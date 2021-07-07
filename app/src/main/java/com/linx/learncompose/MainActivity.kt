@@ -4,13 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -42,10 +41,18 @@ class MainActivity : ComponentActivity() {
         Intent(this, ThreeActivity::class.java)
     }
 
+    private val intentFour by lazy {
+        Intent(this, FourActivity::class.java)
+    }
+
+    private val intentFive by lazy {
+        Intent(this, FiveActivity::class.java)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            WeComposeTheme() {
+            WeComposeTheme {
                 //Text底层是Canvas的drawText()
 //                Text("扔物线")
 
@@ -60,7 +67,7 @@ class MainActivity : ComponentActivity() {
 //                    contentDescription = "Coil Image"
 //                )
 
-                Column {
+                Column(Modifier.verticalScroll(state = rememberScrollState())) {
                     /**
                      * [Column] 上下结构
                      *
@@ -168,13 +175,10 @@ class MainActivity : ComponentActivity() {
                                 .padding(10.dp)
                                 .background(Color.White)
                                 .padding(10.dp)
-                                .height(20.dp)
-                                .width(20.dp)
-                                .clickable {
-                                    startActivity(intentThree)
-                                }
+                                .fillMaxWidth()
+                                .height(100.dp)
                         ) {
-                            items(list) { item ->
+                            itemsIndexed(list) { index: Int, item: String ->
                                 Text(text = item)
                             }
                         }
@@ -183,16 +187,23 @@ class MainActivity : ComponentActivity() {
                     /**
                      * [Row]左右结构
                      */
-                    Row {
-                        Text(text = "你好")
+                    Row(Modifier.clickable {
+                        startActivity(intentFour)
+                    }) {
+                        Text(text = "第八节课")
                         Image(
                             painter = painterResource(id = R.drawable.ic_launcher_background),
                             contentDescription = "照片"
                         )
                     }
-                    ZhuKai("Hello") // Hello:这是个短名字
-                    ZhuKai("RengWuXian") // RengWuXian:这是个长名字
-                    ZhuKai("ZhuKai") // ZhuKai:这是个长名字
+                    // Hello:这是个短名字
+                    ZhuKai("Hello", Modifier.clickable {
+                        startActivity(intentFive)
+                    })
+                    // RengWuXian:这是个长名字
+                    ZhuKai("RengWuXian")
+                    // ZhuKai:这是个长名字
+                    ZhuKai("ZhuKai")
                 }
 
             }
@@ -208,8 +219,8 @@ class MainActivity : ComponentActivity() {
  * 不要Text() Image()这样
  */
 @Composable
-private fun ZhuKai(name: String) {
-    Column(Modifier.background(Color.Red)) {
+private fun ZhuKai(name: String, modifier: Modifier = Modifier) {
+    Column(modifier.background(Color.Red)) {
 
         /**
          * 加上[remember]，可以保证如果name不变的话 remember内的函数不会走，提高性能
