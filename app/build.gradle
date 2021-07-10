@@ -70,4 +70,10 @@ dependencies {
 
     //扩展库 可以使用viewModels()快速创建viewModel
     implementation "androidx.activity:activity-ktx:1.2.2"
+
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+
+    //有提供mutableLiveData转mutableStateOf的函数
+    implementation "androidx.compose.runtime:runtime-livedata:$composeVersion"
 }

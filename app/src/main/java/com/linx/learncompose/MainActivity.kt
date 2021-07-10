@@ -49,6 +49,10 @@ class MainActivity : ComponentActivity() {
         Intent(this, FiveActivity::class.java)
     }
 
+    private val intentSix by lazy {
+        Intent(this, SixActivity::class.java)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -201,7 +205,9 @@ class MainActivity : ComponentActivity() {
                         startActivity(intentFive)
                     })
                     // RengWuXian:这是个长名字
-                    ZhuKai("RengWuXian")
+                    ZhuKai("RengWuXian", Modifier.clickable {
+                        startActivity(intentSix)
+                    })
                     // ZhuKai:这是个长名字
                     ZhuKai("ZhuKai")
                 }
