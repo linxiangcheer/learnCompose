@@ -3,12 +3,13 @@ package com.linx.learncompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.*
+import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
+import androidx.compose.material.swipeable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -16,6 +17,7 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.layout
@@ -39,10 +41,68 @@ class FiveActivity : ComponentActivity() {
                     Text(text = "hahaha")
                     Text(text = "hehehe")
                 }
+                FivePreviewD()
             }
         }
     }
 
+}
+
+//自定义的触摸反馈
+@Composable
+fun FivePreviewD() {
+    Modifier.pointerInput(Unit) {
+        /**
+         * [forEachGesture]一个手势
+         * 一个手势指的是从手指按下到手指抬起的过程
+         * 捕捉每一个事件
+         */
+        forEachGesture {
+            //进入上下文
+            awaitPointerEventScope {
+                /**
+                 * 取到事件
+                 * Compose子View还能看到被消耗的事件
+                 */
+                val event = awaitPointerEvent()
+                /**
+                 * 和onTouchEvent()很像
+                 *
+                 * for(change in event.changes) {
+                 *   change.position
+                 *   change.consumed
+                 * }
+                 *
+                 */
+
+            }
+        }
+    }
+    //其他触摸反馈相关的方法
+    /**
+     *
+    Modifier.apply {
+    //点击
+    clickable { }
+    //拖拽
+    draggable()
+    //滑动：下拉刷新、滑动删除,指的是一个动作
+    swipeable()
+    //捏（放大缩小）
+    transformable()
+    pointerInput(Unit) {
+    //摸一下的
+    detectTapGestures {  }
+    detectTransformGestures { centroid, pan, zoom, rotation ->  }
+    }
+    //专门处理每一个移动细节的,不移动控件; 移动的时候颜色渐变
+    scrollable()
+    //横向滚动
+    horizontalScroll()
+    //纵向滚动
+    verticalScroll()
+    }
+     */
 }
 
 @Composable
@@ -61,11 +121,18 @@ fun FivePreviewC() {
      *
      * 分割线的最大高度 0 (因为分割线里面没有内容，因为不能辅助父控件做测量,而文字需要全部显示)
      * 文字的最大高度 文字的高度
+     *
+     * 固有尺寸是用来辅助测量的
+     * 需要定制固有尺寸规则需要重写MeasurePolicy函数
      */
     Row(Modifier.height(IntrinsicSize.Min)) {
         Text(text = "text1")
         //分割线
-        Divider(Modifier.width(1.dp).fillMaxHeight(), color = Color.Red)
+        Divider(
+            Modifier
+                .width(1.dp)
+                .fillMaxHeight(), color = Color.Red
+        )
         Text(text = "text2")
     }
 }
@@ -99,6 +166,7 @@ fun FivePreviewB(modifier: Modifier = Modifier, content: @Composable () -> Unit)
         var width = 0
         //高度是所有控件的高度之和
         var height = 0
+
         /**
          * [measurables]是复数，因为Layout()函数内部可能有多个组件
          */

@@ -41,4 +41,13 @@ package com.linx.learncompose.note
  * 传统测量环节会有试探性的测量,所以可能会有多次测量
  *
  *
+ * [触摸反馈]
+ * 指的是自己设置触摸反馈的规则，然后实现出来
+ * 传统： 重写onTouchEvent()普通的 \onInterceptTouchEvent() ViewGroup拦截子View \ dispatchTouchEvent()根的触摸反馈但是会破坏比较底层的东西(拦截)
+ *
+ *
+ * LazyColumn和Column(Modifier.verticalScroll())对比，LazyColumn是懒加载，只加载显示出来的东西，所以更省内存
+ *
+ * RecyclerView有缓存机制\ScrollView没有
+ *
  */
